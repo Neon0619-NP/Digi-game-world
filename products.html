@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Products - Digi Game World</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+
+    <!-- LEFT SIDE -->
+    <div class="left-nav">
+        <a href="index.html" class="logo-link">
+            <img src="logo.png" alt="Logo" class="logo-img">
+        </a>
+
+        <h2 class="site-name">Digi Game World</h2>
+    </div>
+
+    <!-- RIGHT SIDE -->
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="cart.html">Cart 🛒<span id="cart-count">0</span></a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="admin.html">Admin</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="signup.html">Sign Up</a></li>
+        </ul>
+    </nav>
+
+</header>
+
+<section class="products">
+    <h2>All Products</h2>
+
+<div class="product-controls">
+    <input type="text" id="searchInput" placeholder="Search products...">
+
+    <select id="categoryFilter">
+        <option value="all">All Categories</option>
+        <option value="console">Consoles</option>
+        <option value="accessory">Accessories</option>
+        <option value="setup">Setups</option>
+    </select>
+</div>
+
+    <div class="product-grid">
+
+        <div class="card product-card" data-name="Gaming Console" data-category="setup">
+            <img src="https://images.unsplash.com/photo-1606144042614-b2417e99c4e3" alt="">
+            <h3>PlayStation 5</h3>
+            <p>Next-gen gaming console.</p>
+            <h4>R12 999</h4>
+            <button onclick="addToCart('PlayStation 5', 12999)">Add to Cart</button>
+        </div>
+
+        <div class="card product-card" data-name="Gaming Headset" data-category="accessory">
+            <img src="https://images.unsplash.com/photo-1593305841991-05c297ba4575" alt="">
+            <h3>Gaming Headset</h3>
+            <p>High-quality sound experience.</p>
+            <h4>R899</h4>
+            <button onclick="addToCart('Gaming Headset', 899)">Add to Cart</button>
+        </div>
+
+        <div class="card product-card" data-name="Gaming Setup" data-category="setup">
+            <img src="https://images.unsplash.com/photo-1542751110-97427bbecf20" alt="">
+            <h3>Gaming Setup</h3>
+            <p>Full pro gaming setup.</p>
+            <h4>R15 999</h4>
+            <button onclick="addToCart('Gaming Setup', 15999)">Add to Cart</button>
+        </div>
+
+    </div>
+</section>
+
+<footer>
+    <p>© 2026 Digi Game World</p>
+</footer>
+<script src="script.js"></script>
+</body>
+</html>

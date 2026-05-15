@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Checkout - Digi Game World</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div id="loader">
+    <div class="spinner"></div>
+</div>
+
+<header>
+    <a href="index.html" class="logo-link">
+    <img src="logo.png" alt="Digi Game World Logo" class="logo-img">
+    </a>
+
+    <nav>
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li><a href="cart.html">Cart 🛒<span id="cart-count">0</span></a></li>
+            <li><a href="profile.html">Profile</a></li>
+            <li><a href="login.html">Login</a></li>
+            <li><a href="signup.html">Sign Up</a></li>
+        </ul>
+    </nav>
+</header>
+
+<section class="about page-animation">
+    <h2>Checkout</h2>
+
+    <form id="checkoutForm" class="checkout-form">
+        <input type="text" placeholder="Full Name" required>
+        <input type="email" placeholder="Email Address" required>
+        <input type="text" placeholder="Delivery Address" required>
+        <input type="text" placeholder="City" required>
+        <input type="text" placeholder="Phone Number" required>
+
+        <select required>
+            <option value="">Select Payment Method</option>
+            <option>Card Payment</option>
+            <option>PayPal</option>
+            <option>Cash on Delivery</option>
+        </select>
+
+        <h3 id="checkoutTotal">Total: R0</h3>
+
+        <button class="shop-btn" type="submit">Place Order</button>
+    </form>
+</section>
+
+<footer>
+    <p>© 2026 Digi Game World</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
