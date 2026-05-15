@@ -568,3 +568,39 @@ nav ul li a:hover{
     border-radius: 8px;
     cursor: pointer;
 }
+
+/* ADMIN ORDERS */
+
+.admin-order-card{
+    max-width: 800px;
+    margin: 20px auto;
+    background: #161616;
+    padding: 25px;
+    border-radius: 15px;
+    border: 1px solid #222;
+    text-align: left;
+}
+
+.admin-order-card h3{
+    color: #00f7ff;
+    margin-bottom: 10px;
+}
+
+.admin-order-card h4{
+    color: #00f7ff;
+    margin-top: 15px;
+}
+
+.admin-order-card p{
+    color: #ccc;
+    margin: 8px 0;
+}
+
+.admin-order-card ul{
+    margin-left: 20px;
+    color: #ccc;
+}
+
+.admin-order-card li{
+    margin: 6px 0;
+}

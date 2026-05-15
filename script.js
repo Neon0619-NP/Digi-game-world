@@ -1,3 +1,22 @@
+import { auth, db } from "./firebase.js";
+
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signOut,
+    onAuthStateChanged,
+    updateProfile
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    collection,
+    addDoc,
+    getDocs,
+    deleteDoc,
+    doc,
+    serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 console.log("Digi Game World Loaded");
 
 // LOADING SCREEN
@@ -113,13 +132,13 @@ function displayCart() {
     cartTotal.innerText = "Total: R" + total;
 }
 
-function increaseQuantity(index) {
+window.increaseQuantity = function(index) {
     cart[index].quantity++;
     saveCart();
     displayCart();
 }
 
-function decreaseQuantity(index) {
+window.decreaseQuantity = function(index) {
     if (cart[index].quantity > 1) {
         cart[index].quantity--;
     } else {
@@ -130,7 +149,7 @@ function decreaseQuantity(index) {
     displayCart();
 }
 
-function removeFromCart(index) {
+window.removeFromCart = function(index) {
     cart.splice(index, 1);
     saveCart();
     displayCart();
@@ -158,11 +177,11 @@ if (checkoutTotal) {
     checkoutTotal.innerText = "Total: R" + total;
 }
 
-// CHECKOUT FORM
+// FIREBASE CHECKOUT / ORDERS
 const checkoutForm = document.getElementById("checkoutForm");
 
 if (checkoutForm) {
-    checkoutForm.addEventListener("submit", function(e) {
+    checkoutForm.addEventListener("submit", async function(e) {
         e.preventDefault();
 
         if (cart.length === 0) {
@@ -170,12 +189,47 @@ if (checkoutForm) {
             return;
         }
 
-        alert("Order placed successfully! Thank you for shopping with Digi Game World.");
+        const inputs = checkoutForm.querySelectorAll("input");
+        const paymentMethod = checkoutForm.querySelector("select").value;
 
-        cart = [];
-        saveCart();
+        const customerName = inputs[0].value.trim();
+        const customerEmail = inputs[1].value.trim();
+        const deliveryAddress = inputs[2].value.trim();
+        const city = inputs[3].value.trim();
+        const phoneNumber = inputs[4].value.trim();
 
-        window.location.href = "index.html";
+        let total = 0;
+
+        cart.forEach(item => {
+            total += item.price * item.quantity;
+        });
+
+        const order = {
+            customerName: customerName,
+            customerEmail: customerEmail,
+            deliveryAddress: deliveryAddress,
+            city: city,
+            phoneNumber: phoneNumber,
+            paymentMethod: paymentMethod,
+            items: cart,
+            total: total,
+            status: "Pending",
+            createdAt: serverTimestamp()
+        };
+
+        try {
+            await addDoc(collection(db, "orders"), order);
+
+            alert("Order placed successfully!");
+
+            cart = [];
+            saveCart();
+
+            window.location.href = "index.html";
+
+        } catch (error) {
+            alert("Order failed: " + error.message);
+        }
     });
 }
 
@@ -210,124 +264,37 @@ if (searchInput) {
 if (categoryFilter) {
     categoryFilter.addEventListener("change", filterProducts);
 }
-// USER SIGNUP SYSTEM
-const signupForm = document.getElementById("signupForm");
 
-if (signupForm) {
-    signupForm.addEventListener("submit", function(e) {
-        e.preventDefault();
-
-        const name = document.getElementById("signupName").value.trim();
-        const email = document.getElementById("signupEmail").value.trim();
-        const password = document.getElementById("signupPassword").value.trim();
-
-        let users = JSON.parse(localStorage.getItem("users")) || [];
-
-        const userExists = users.find(user => user.email === email);
-
-        if (userExists) {
-            alert("This email is already registered.");
-            return;
-        }
-
-        const newUser = {
-            name: name,
-            email: email,
-            password: password
-        };
-
-        users.push(newUser);
-
-        localStorage.setItem("users", JSON.stringify(users));
-
-        alert("Account created successfully! Please login.");
-
-        window.location.href = "login.html";
-    });
-}
-
-// USER LOGIN SYSTEM
-const loginForm = document.getElementById("loginForm");
-
-if (loginForm) {
-    loginForm.addEventListener("submit", function(e) {
-        e.preventDefault();
-
-        const email = document.getElementById("loginEmail").value.trim();
-        const password = document.getElementById("loginPassword").value.trim();
-
-        let users = JSON.parse(localStorage.getItem("users")) || [];
-
-        const validUser = users.find(user => user.email === email && user.password === password);
-
-        if (!validUser) {
-            alert("Invalid email or password.");
-            return;
-        }
-
-        localStorage.setItem("loggedInUser", JSON.stringify(validUser));
-
-        alert("Welcome back, " + validUser.name + "!");
-
-        window.location.href = "index.html";
-    });
-}
-
-// LOGOUT SYSTEM
-const logoutBtn = document.getElementById("logoutBtn");
-const loggedInUser = JSON.parse(localStorage.getItem("loggedInUser"));
-
-if (logoutBtn && loggedInUser) {
-    logoutBtn.style.display = "inline";
-
-    logoutBtn.addEventListener("click", function(e) {
-        e.preventDefault();
-
-        localStorage.removeItem("loggedInUser");
-
-        alert("You have logged out.");
-
-        window.location.href = "index.html";
-    });
-}
-// PROFILE PAGE
-const profileName = document.getElementById("profileName");
-const profileEmail = document.getElementById("profileEmail");
-const profileStatus = document.getElementById("profileStatus");
-
-if (profileName && profileEmail && profileStatus) {
-    const user = JSON.parse(localStorage.getItem("loggedInUser"));
-
-    if (user) {
-        profileName.innerText = "Name: " + user.name;
-        profileEmail.innerText = "Email: " + user.email;
-        profileStatus.innerText = "Status: Logged In";
-    } else {
-        alert("Please login first.");
-        window.location.href = "login.html";
-    }
-}
-// ADMIN PRODUCT SYSTEM
+// FIREBASE ADMIN PRODUCT SYSTEM
 const adminProductForm = document.getElementById("adminProductForm");
 const adminProductList = document.getElementById("adminProductList");
 
-let adminProducts = JSON.parse(localStorage.getItem("adminProducts")) || [];
-
-function saveAdminProducts() {
-    localStorage.setItem("adminProducts", JSON.stringify(adminProducts));
+async function addFirebaseProduct(product) {
+    await addDoc(collection(db, "products"), {
+        name: product.name,
+        price: product.price,
+        image: product.image,
+        category: product.category,
+        description: product.description,
+        createdAt: serverTimestamp()
+    });
 }
 
-function displayAdminProducts() {
+async function displayFirebaseAdminProducts() {
     if (!adminProductList) return;
 
     adminProductList.innerHTML = "";
 
-    if (adminProducts.length === 0) {
-        adminProductList.innerHTML = "<p>No admin products added yet.</p>";
+    const querySnapshot = await getDocs(collection(db, "products"));
+
+    if (querySnapshot.empty) {
+        adminProductList.innerHTML = "<p>No products added yet.</p>";
         return;
     }
 
-    adminProducts.forEach((product, index) => {
+    querySnapshot.forEach((productDoc) => {
+        const product = productDoc.data();
+
         adminProductList.innerHTML += `
             <div class="admin-product-card">
                 <img src="${product.image}" alt="${product.name}">
@@ -336,21 +303,21 @@ function displayAdminProducts() {
                     <p>${product.description}</p>
                     <p>Category: ${product.category}</p>
                     <h4>R${product.price}</h4>
-                    <button onclick="deleteAdminProduct(${index})">Delete</button>
+                    <button onclick="deleteFirebaseProduct('${productDoc.id}')">Delete</button>
                 </div>
             </div>
         `;
     });
 }
 
-function deleteAdminProduct(index) {
-    adminProducts.splice(index, 1);
-    saveAdminProducts();
-    displayAdminProducts();
-}
+window.deleteFirebaseProduct = async function(productId) {
+    await deleteDoc(doc(db, "products", productId));
+    alert("Product deleted.");
+    displayFirebaseAdminProducts();
+};
 
 if (adminProductForm) {
-    adminProductForm.addEventListener("submit", function(e) {
+    adminProductForm.addEventListener("submit", async function(e) {
         e.preventDefault();
 
         const product = {
@@ -361,14 +328,251 @@ if (adminProductForm) {
             description: document.getElementById("adminProductDescription").value.trim()
         };
 
-        adminProducts.push(product);
-        saveAdminProducts();
+        await addFirebaseProduct(product);
 
-        alert("Product added successfully.");
+        alert("Product added to Firebase successfully.");
 
         adminProductForm.reset();
-        displayAdminProducts();
+
+        displayFirebaseAdminProducts();
     });
 }
 
-displayAdminProducts();
+displayFirebaseAdminProducts();
+
+// FIREBASE SIGNUP
+const signupForm = document.getElementById("signupForm");
+
+if (signupForm) {
+    signupForm.addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const name = document.getElementById("signupName").value.trim();
+        const email = document.getElementById("signupEmail").value.trim();
+        const password = document.getElementById("signupPassword").value.trim();
+
+        try {
+            const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+            await updateProfile(userCredential.user, {
+                displayName: name
+            });
+
+            alert("Account created successfully!");
+
+            window.location.href = "login.html";
+
+        } catch (error) {
+            alert(error.message);
+        }
+    });
+}
+
+// FIREBASE LOGIN
+const loginForm = document.getElementById("loginForm");
+
+if (loginForm) {
+    loginForm.addEventListener("submit", async function(e) {
+        e.preventDefault();
+
+        const email = document.getElementById("loginEmail").value.trim();
+        const password = document.getElementById("loginPassword").value.trim();
+
+        try {
+            await signInWithEmailAndPassword(auth, email, password);
+
+            alert("Login successful!");
+
+            window.location.href = "index.html";
+
+        } catch (error) {
+            alert("Invalid email or password.");
+        }
+    });
+}
+
+// FIREBASE LOGOUT + PROFILE
+const logoutBtn = document.getElementById("logoutBtn");
+
+onAuthStateChanged(auth, function(user) {
+
+    // LOGOUT BUTTON
+    if (logoutBtn) {
+
+        if (user) {
+
+            logoutBtn.style.display = "inline";
+
+            logoutBtn.onclick = async function(e) {
+
+                e.preventDefault();
+
+                await signOut(auth);
+
+                alert("You have logged out.");
+
+                window.location.href = "index.html";
+            };
+
+        } else {
+
+            logoutBtn.style.display = "none";
+        }
+    }
+
+    // PROFILE PAGE
+    const profileName = document.getElementById("profileName");
+    const profileEmail = document.getElementById("profileEmail");
+    const profileStatus = document.getElementById("profileStatus");
+
+    if (profileName && profileEmail && profileStatus) {
+
+        if (user) {
+
+            profileName.innerText = "Name: " + (user.displayName || "User");
+
+            profileEmail.innerText = "Email: " + user.email;
+
+            profileStatus.innerText = "Status: Logged In";
+
+        } else {
+
+            alert("Please login first.");
+
+            window.location.href = "login.html";
+        }
+    }
+});
+
+// FIREBASE PRODUCTS DISPLAY
+const firebaseProducts = document.getElementById("firebaseProducts");
+
+async function loadFirebaseProducts() {
+
+    if (!firebaseProducts) return;
+
+    firebaseProducts.innerHTML = "";
+
+    const querySnapshot = await getDocs(collection(db, "products"));
+
+    if (querySnapshot.empty) {
+        firebaseProducts.innerHTML = "<p>No products available.</p>";
+        return;
+    }
+
+    querySnapshot.forEach((productDoc) => {
+
+        const product = productDoc.data();
+
+        firebaseProducts.innerHTML += `
+
+            <div class="card product-card"
+                 data-name="${product.name}"
+                 data-category="${product.category}">
+
+                <img src="${product.image}" alt="${product.name}">
+
+                <h3>${product.name}</h3>
+
+                <p>${product.description}</p>
+
+                <h4>R${product.price}</h4>
+
+                <button class="add-cart-btn"
+                        data-name="${product.name}"
+                        data-price="${product.price}">
+                    Add to Cart
+                </button>
+
+            </div>
+
+        `;
+    });
+
+    const addCartButtons = document.querySelectorAll(".add-cart-btn");
+
+    addCartButtons.forEach(button => {
+
+        button.addEventListener("click", function() {
+
+            const name = this.dataset.name;
+
+            const price = Number(this.dataset.price);
+
+            addToCart(name, price);
+        });
+    });
+
+    filterProducts();
+}
+
+loadFirebaseProducts();
+// FIREBASE ADMIN ORDERS DISPLAY
+const adminOrdersList = document.getElementById("adminOrdersList");
+
+async function displayFirebaseOrders() {
+    if (!adminOrdersList) return;
+
+    adminOrdersList.innerHTML = "";
+
+    const querySnapshot = await getDocs(collection(db, "orders"));
+
+    if (querySnapshot.empty) {
+        adminOrdersList.innerHTML = "<p>No orders yet.</p>";
+        return;
+    }
+
+    querySnapshot.forEach((orderDoc) => {
+        const order = orderDoc.data();
+
+        let itemsHTML = "";
+
+        order.items.forEach(item => {
+            itemsHTML += `
+                <li>
+                    ${item.name} - R${item.price} x ${item.quantity}
+                </li>
+            `;
+        });
+
+        adminOrdersList.innerHTML += `
+            <div class="admin-order-card">
+                <h3>Order ID: ${orderDoc.id}</h3>
+                <p><strong>Name:</strong> ${order.customerName}</p>
+                <p><strong>Email:</strong> ${order.customerEmail}</p>
+                <p><strong>Phone:</strong> ${order.phoneNumber}</p>
+                <p><strong>Address:</strong> ${order.deliveryAddress}, ${order.city}</p>
+                <p><strong>Payment:</strong> ${order.paymentMethod}</p>
+                <p><strong>Status:</strong> ${order.status}</p>
+
+                <h4>Items:</h4>
+                <ul>${itemsHTML}</ul>
+
+                <h3>Total: R${order.total}</h3>
+            </div>
+        `;
+    });
+}
+
+displayFirebaseOrders();
+
+// ADMIN PAGE PROTECTION
+const adminPage = document.getElementById("adminProductForm");
+
+if (adminPage) {
+    onAuthStateChanged(auth, function(user) {
+        const adminEmail = "neonkoane71@gmail.com";
+
+        if (!user) {
+            alert("Please login as admin first.");
+            window.location.href = "login.html";
+            return;
+        }
+
+        if (user.email !== adminEmail) {
+            alert("Access denied. Admin only.");
+            window.location.href = "index.html";
+            return;
+        }
+    });
+}
