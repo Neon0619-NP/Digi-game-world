@@ -14,6 +14,7 @@ import {
     getDocs,
     deleteDoc,
     doc,
+    updateDoc,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -265,6 +266,8 @@ if (categoryFilter) {
     categoryFilter.addEventListener("change", filterProducts);
 }
 
+let editingProductId = null;
+
 // FIREBASE ADMIN PRODUCT SYSTEM
 const adminProductForm = document.getElementById("adminProductForm");
 const adminProductList = document.getElementById("adminProductList");
@@ -303,7 +306,13 @@ async function displayFirebaseAdminProducts() {
                     <p>${product.description}</p>
                     <p>Category: ${product.category}</p>
                     <h4>R${product.price}</h4>
-                    <button onclick="deleteFirebaseProduct('${productDoc.id}')">Delete</button>
+                    <button onclick="editFirebaseProduct('${productDoc.id}', '${product.name}', ${product.price}, '${product.image}', '${product.category}', '${product.description}')">
+                     Edit
+                    </button>
+                    
+                    <button onclick="deleteFirebaseProduct('${productDoc.id}')">
+                     Delete
+                    </button>
                 </div>
             </div>
         `;
@@ -314,6 +323,28 @@ window.deleteFirebaseProduct = async function(productId) {
     await deleteDoc(doc(db, "products", productId));
     alert("Product deleted.");
     displayFirebaseAdminProducts();
+};
+
+window.editFirebaseProduct = function(id, name, price, image, category, description) {
+
+    editingProductId = id;
+
+    document.getElementById("adminProductName").value = name;
+
+    document.getElementById("adminProductPrice").value = price;
+
+    document.getElementById("adminProductImage").value = image;
+
+    document.getElementById("adminProductCategory").value = category;
+
+    document.getElementById("adminProductDescription").value = description;
+
+    adminProductForm.querySelector("button").innerText = "Update Product";
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 };
 
 if (adminProductForm) {
@@ -328,12 +359,21 @@ if (adminProductForm) {
             description: document.getElementById("adminProductDescription").value.trim()
         };
 
-        await addFirebaseProduct(product);
+        if (editingProductId) {
+            await updateDoc(doc(db, "products", editingProductId), product);
 
-        alert("Product added to Firebase successfully.");
+            alert("Product updated successfully.");
+
+            editingProductId = null;
+            adminProductForm.querySelector("button").innerText = "Add Product";
+
+        } else {
+            await addFirebaseProduct(product);
+
+            alert("Product added successfully.");
+        }
 
         adminProductForm.reset();
-
         displayFirebaseAdminProducts();
     });
 }
@@ -395,6 +435,23 @@ if (loginForm) {
 const logoutBtn = document.getElementById("logoutBtn");
 
 onAuthStateChanged(auth, function(user) {
+    
+    const adminNav = document.getElementById("adminNav");
+
+    if (adminNav) {
+
+      const adminEmail = "neonkoane71@gmail.com";
+
+      if (user && user.email === adminEmail) {
+
+        adminNav.style.display = "block";
+
+      } else {
+
+        adminNav.style.display = "none";
+      }
+    }
+
 
     // LOGOUT BUTTON
     if (logoutBtn) {
@@ -576,3 +633,14 @@ if (adminPage) {
         }
     });
 }
+// WHATSAPP SERVICE MESSAGE
+window.sendWhatsApp = function(serviceName) {
+
+    const message =
+        `Hello Digi Game World, I need help with: ${serviceName}. Please send me more information.`;
+
+    const whatsappURL =
+        `https://wa.me/27687621416?text=${encodeURIComponent(message)}`;
+
+    window.open(whatsappURL, "_blank");
+};

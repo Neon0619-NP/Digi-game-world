@@ -27,7 +27,9 @@
             <li><a href="contact.html">Contact</a></li>
             <li><a href="cart.html">Cart 🛒<span id="cart-count">0</span></a></li>
             <li><a href="profile.html">Profile</a></li>
-            <li><a href="admin.html">Admin</a></li>
+            <li id="adminNav" style="display:none;">
+                <a href="admin.html">Admin</a>
+            </li>
             <li><a href="login.html">Login</a></li>
             <li><a href="signup.html">Sign Up</a></li>
         </ul>
@@ -35,23 +37,53 @@
 
 </header>
 
-<section class="about">
+<section class="contact-section">
+
     <h2>Contact Us</h2>
 
-    <p>Email: support@digigameworld.com</p>
-    <p>Phone: +27 11 123 4567</p>
-    <p>Location: Johannesburg, South Africa</p>
+    <div class="contact-card">
 
-    <br>
+        <h3>Parmjeet</h3>
 
-    <form id="contactForm">
-        <input type="text" placeholder="Your Name" style="padding:10px;width:80%;margin:10px;"><br>
-        <input type="email" placeholder="Your Email" style="padding:10px;width:80%;margin:10px;"><br>
-        <textarea placeholder="Message" style="padding:10px;width:80%;height:120px;margin:10px;"></textarea><br>
-        <button class="shop-btn">Send Message</button>
-    </form>
+        <div class="contact-item">
+            <span>📞</span>
+            <p>Phone: <a href="tel:0761476571">076 147 6571</a></p>
+        </div>
+
+        <div class="contact-item">
+            <span>📱</span>
+            <p>Shop Cell: <a href="tel:0687621416">068 762 1416</a></p>
+        </div>
+
+        <div class="contact-item">
+            <span>☎️</span>
+            <p>Shop Cell: <a href="tel:0118232375">011 823 2375</a></p>
+        </div>
+
+        <div class="contact-item">
+            <span>✉</span>
+            <p>Email:
+                <a href="mailto:parmjeet122@gmail.com">
+                    parmjeet122@gmail.com
+                </a>
+            </p>
+        </div>
+
+        <div class="contact-item">
+            <span>📍</span>
+            <p>
+                Location: East Rand Traders Square,
+                Shop No. R48 - R52
+            </p>
+        </div>
+
+        <button onclick="sendWhatsApp('General Inquiry')">
+            Send WhatsApp
+        </button>
+
+    </div>
+
 </section>
-
 <footer>
     <p>© 2026 Digi Game World</p>
 </footer>

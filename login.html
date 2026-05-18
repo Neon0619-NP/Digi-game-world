@@ -8,27 +8,45 @@
 <body>
 
 <header>
-    <div class="logo">Digi Game World</div>
+        <!-- LEFT SIDE -->
+    <div class="left-nav">
+        <a href="index.html" class="logo-link">
+            <img src="logo.png" alt="Logo" class="logo-img">
+        </a>
+
+        <h2 class="site-name">Digi Game World</h2>
+   </div>
       <nav>
            <ul>
              <li><a href="index.html">Home</a></li>
              <li><a href="profile.html">Profile</a></li>
-              <img src="logo.png" alt="Digi Game World Logo" class="logo-img">
            </ul>
       </nav>
 </header>
 
-<section class="about">
+<section class="auth-section">
+
     <h2>Login</h2>
 
-<form id="loginForm">
-    <input type="email" id="loginEmail" placeholder="Email" required>
-    <input type="password" id="loginPassword" placeholder="Password" required>
+    <div class="auth-card">
 
-    <button class="shop-btn" type="submit">Login</button>
-</form>
+        <h3>Welcome Back</h3>
 
-<p>Don't have an account? <a href="signup.html" style="color:#00f7ff;">Sign Up</a></p>
+        <form id="loginForm">
+            <input type="email" id="loginEmail" placeholder="Email Address" required>
+
+            <input type="password" id="loginPassword" placeholder="Password" required>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <p>
+            Don't have an account?
+            <a href="signup.html">Sign Up</a>
+        </p>
+
+    </div>
+
 </section>
 
 <footer>

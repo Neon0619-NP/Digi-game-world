@@ -28,24 +28,165 @@
             <li><a href="cart.html">Cart 🛒<span id="cart-count">0</span></a></li>
             <li><a href="profile.html">Profile</a></li>
             <li><a href="admin.html">Admin</a></li>
+            <li id="adminNav" style="display:none;">
+                <a href="admin.html">Admin</a>
+            </li>
             <li><a href="login.html">Login</a></li>
             <li><a href="signup.html">Sign Up</a></li>
         </ul>
     </nav>
 
 </header>
-<section class="about">
-    <h2>Our Services</h2>
 
-    <p>
-        We provide gaming console sales, game downloads,
-        repair services, custom gaming setups, and esports coaching.
-    </p>
+<section class="services page-animation">
 
-    <p>
-        We also offer delivery, installation, and upgrade services
-        for all gaming equipment.
-    </p>
+    <h2>Repair Services</h2>
+
+    <div class="service-grid">
+
+        <!-- Service 1 -->
+        <div class="service-card">
+            <img src="https://images.unsplash.com/photo-1621259182978-fbf93132d53d" alt="Console Repair">
+
+            <div class="service-info">
+                <h3>Console Check-Up</h3>
+
+                <p>
+                    Bring your PlayStation or Xbox in for a repair quote
+                    and basic troubleshooting support.
+                </p>
+
+                <h4>Quote First</h4>
+
+                <button onclick="sendWhatsApp('Console Check-Up')">
+                    Ask on WhatsApp
+                </button>
+            </div>
+        </div>
+
+        <!-- Service 2 -->
+        <div class="service-card">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3" alt="PC Help">
+
+            <div class="service-info">
+                <h3>PC / Laptop Help</h3>
+
+                <p>
+                    Support for gaming PCs, laptops, software problems,
+                    and setup optimization.
+                </p>
+
+                <h4>From R150</h4>
+
+                <button onclick="sendWhatsApp('PC / Laptop Help')">
+                    Ask on WhatsApp
+                </button>
+            </div>
+        </div>
+
+        <!-- Service 3 -->
+        <div class="service-card">
+            <img src="https://images.unsplash.com/photo-1603481546579-65d935ba9cdd" alt="Accessory Help">
+
+            <div class="service-info">
+                <h3>Gaming Accessory Help</h3>
+
+                <p>
+                    Assistance with gaming accessories, replacements,
+                    setup advice, and compatibility.
+                </p>
+
+                <h4>Ask Price</h4>
+
+                <button onclick="sendWhatsApp('Gaming Accessory Help')">
+                    Ask on WhatsApp
+                </button>
+            </div>
+        </div>
+
+        <!-- Service 4 -->
+        <div class="service-card">
+            <img src="https://images.unsplash.com/photo-1545239351-1141bd82e8a6" alt="Gaming Setup">
+
+            <div class="service-info">
+                <h3>Gaming Setup Assistance</h3>
+
+                <p>
+                    Help with gaming desk setups, RGB layouts,
+                    monitor placement, and cable organization.
+                </p>
+
+                <h4>From R250</h4>
+
+                <button onclick="sendWhatsApp('Gaming Setup Assistance')">
+                    Ask on WhatsApp
+                </button>
+            </div>
+        </div>
+
+        <!-- Service 5 -->
+        <div class="service-card">
+            <img src="https://images.unsplash.com/photo-1592840496694-26d035b52b48" alt="Controller Repair">
+
+            <div class="service-info">
+                <h3>Controller Repair</h3>
+
+                <p>
+                    Support for drifting sticks, button issues,
+                    charging problems, and controller troubleshooting.
+                </p>
+
+                <h4>Quote First</h4>
+
+                <button onclick="sendWhatsApp('Controller Repair')">
+                    Ask on WhatsApp
+                </button>
+            </div>
+        </div>
+
+        <!-- Service 6 -->
+        <div class="service-card">
+            <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085" alt="Streaming Help">
+
+            <div class="service-info">
+                <h3>Streaming Setup Help</h3>
+
+                <p>
+                    Beginner streaming support including webcams,
+                    microphones, OBS setup, and streaming accessories.
+                </p>
+
+                <h4>From R300</h4>
+
+                <button onclick="sendWhatsApp('Streaming Setup Help')">
+                    Ask on WhatsApp
+                </button>
+            </div>
+        </div>
+         
+        <div class="service-card">
+            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3"alt="Report Problem">
+            
+          <div class="service-info">
+             <h3>Report a Problem</h3>
+              <p>
+                 Experiencing issues with your console, setup,
+                 accessories, or recent purchase? Contact us directly
+                 for support and assistance.
+              </p>
+
+              <h4>Support Available</h4>
+
+              <button onclick="sendWhatsApp('Report a Problem')">
+                 Report on WhatsApp
+              </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
 </section>
 
 <footer>
