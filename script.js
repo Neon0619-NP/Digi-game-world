@@ -12,6 +12,7 @@ import {
     collection,
     addDoc,
     getDocs,
+    getDoc,
     deleteDoc,
     doc,
     updateDoc,
@@ -284,6 +285,7 @@ async function addFirebaseProduct(product) {
 }
 
 async function displayFirebaseAdminProducts() {
+
     if (!adminProductList) return;
 
     adminProductList.innerHTML = "";
@@ -296,26 +298,56 @@ async function displayFirebaseAdminProducts() {
     }
 
     querySnapshot.forEach((productDoc) => {
+
         const product = productDoc.data();
 
         adminProductList.innerHTML += `
             <div class="admin-product-card">
+
                 <img src="${product.image}" alt="${product.name}">
+
                 <div>
                     <h3>${product.name}</h3>
+
                     <p>${product.description}</p>
+
                     <p>Category: ${product.category}</p>
+
                     <h4>R${product.price}</h4>
-                    <button onclick="editFirebaseProduct('${productDoc.id}', '${product.name}', ${product.price}, '${product.image}', '${product.category}', '${product.description}')">
-                     Edit
+
+                    <button onclick="editFirebaseProduct('${productDoc.id}')">
+                        Edit
                     </button>
-                    
+
                     <button onclick="deleteFirebaseProduct('${productDoc.id}')">
-                     Delete
+                        Delete
                     </button>
                 </div>
+
             </div>
         `;
+    });
+
+    document.querySelectorAll(".edit-product-btn").forEach(button => {
+        button.addEventListener("click", function() {
+
+            const productId = this.dataset.id;
+
+            const selectedDoc = querySnapshot.docs.find(docItem => docItem.id === productId);
+
+            if (!selectedDoc) return;
+
+            const product = selectedDoc.data();
+
+            window.editFirebaseProduct(
+                selectedDoc.id,
+                product.name,
+                product.price,
+                product.image,
+                product.category,
+                product.description
+            );
+        });
     });
 }
 
@@ -325,19 +357,32 @@ window.deleteFirebaseProduct = async function(productId) {
     displayFirebaseAdminProducts();
 };
 
-window.editFirebaseProduct = function(id, name, price, image, category, description) {
+window.editFirebaseProduct = async function(id) {
+
+    const productRef = doc(db, "products", id);
+
+    const productSnap = await getDoc(productRef);
+
+    if (!productSnap.exists()) {
+
+        alert("Product not found.");
+
+        return;
+    }
+
+    const product = productSnap.data();
 
     editingProductId = id;
 
-    document.getElementById("adminProductName").value = name;
+    document.getElementById("adminProductName").value = product.name;
 
-    document.getElementById("adminProductPrice").value = price;
+    document.getElementById("adminProductPrice").value = product.price;
 
-    document.getElementById("adminProductImage").value = image;
+    document.getElementById("adminProductImage").value = product.image;
 
-    document.getElementById("adminProductCategory").value = category;
+    document.getElementById("adminProductCategory").value = product.category;
 
-    document.getElementById("adminProductDescription").value = description;
+    document.getElementById("adminProductDescription").value = product.description;
 
     adminProductForm.querySelector("button").innerText = "Update Product";
 
