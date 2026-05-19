@@ -236,28 +236,41 @@ if (checkoutForm) {
 }
 
 // PRODUCT SEARCH AND FILTER
-const searchInput = document.getElementById("searchInput");
-const categoryFilter = document.getElementById("categoryFilter");
-const productCards = document.querySelectorAll(".product-card");
-
 function filterProducts() {
-    const searchText = searchInput ? searchInput.value.toLowerCase() : "";
-    const selectedCategory = categoryFilter ? categoryFilter.value : "all";
+    const searchInput = document.getElementById("searchInput");
+    const categoryFilter = document.getElementById("categoryFilter");
+    const cards = document.querySelectorAll(".product-card");
 
-    productCards.forEach(card => {
+    if (!searchInput || !categoryFilter) return;
+
+    const searchText = searchInput.value.toLowerCase().trim();
+    const selectedCategory = categoryFilter.value;
+
+    cards.forEach(card => {
         const productName = card.dataset.name.toLowerCase();
         const productCategory = card.dataset.category;
 
         const matchesSearch = productName.includes(searchText);
-        const matchesCategory = selectedCategory === "all" || productCategory === selectedCategory;
+        const matchesCategory =
+            selectedCategory === "all" || productCategory === selectedCategory;
 
-        if (matchesSearch && matchesCategory) {
-            card.style.display = "block";
-        } else {
-            card.style.display = "none";
-        }
+        card.style.display = matchesSearch && matchesCategory ? "block" : "none";
     });
 }
+
+window.filterProducts = filterProducts;
+
+document.addEventListener("input", function(e) {
+    if (e.target.id === "searchInput") {
+        filterProducts();
+    }
+});
+
+document.addEventListener("change", function(e) {
+    if (e.target.id === "categoryFilter") {
+        filterProducts();
+    }
+});
 
 if (searchInput) {
     searchInput.addEventListener("input", filterProducts);
