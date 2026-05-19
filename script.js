@@ -5,7 +5,8 @@ import {
     signInWithEmailAndPassword,
     signOut,
     onAuthStateChanged,
-    updateProfile
+    updateProfile,
+    sendEmailVerification
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
@@ -272,6 +273,9 @@ document.addEventListener("change", function(e) {
     }
 });
 
+const searchInput = document.getElementById("searchInput");
+const categoryFilter = document.getElementById("categoryFilter");
+
 if (searchInput) {
     searchInput.addEventListener("input", filterProducts);
 }
@@ -456,7 +460,9 @@ if (signupForm) {
                 displayName: name
             });
 
-            alert("Account created successfully!");
+            await sendEmailVerification(userCredential.user);
+
+            alert("Account created successfully! Please check your email and verify your account.");
 
             window.location.href = "login.html";
 
@@ -477,14 +483,19 @@ if (loginForm) {
         const password = document.getElementById("loginPassword").value.trim();
 
         try {
-            await signInWithEmailAndPassword(auth, email, password);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+
+            if (!userCredential.user.emailVerified) {
+                alert("Please verify your email before logging in.");
+                await signOut(auth);
+                return;
+            }
 
             alert("Login successful!");
-
             window.location.href = "index.html";
 
         } catch (error) {
-            alert("Invalid email or password.");
+            alert(error.message);
         }
     });
 }
