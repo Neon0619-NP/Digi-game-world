@@ -485,11 +485,11 @@ if (loginForm) {
         try {
             const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
-            if (!userCredential.user.emailVerified) {
-                alert("Please verify your email before logging in.");
-                await signOut(auth);
-                return;
-            }
+            //if (!userCredential.user.emailVerified) {
+               // alert("Please verify your email before logging in.");
+               // await signOut(auth);
+               // return;
+            //}
 
             alert("Login successful!");
             window.location.href = "index.html";
