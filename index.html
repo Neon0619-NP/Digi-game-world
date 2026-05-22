@@ -26,12 +26,7 @@
    </div>
  </div> 
 
- <button class="menu-toggle"
-        onclick="toggleMobileMenu()">
 
-    ☰
-
-</button>
 
  <!-- RIGHT SIDE -->
    <nav>
@@ -70,6 +65,40 @@
     </nav>
 
  </header>
+
+<header class="mobile-header">
+
+    <div class="mobile-topbar">
+
+        <a href="index.html" class="mobile-logo-wrap">
+            <img src="logo.png" class="mobile-logo">
+        </a>
+
+        <div class="mobile-search">
+            <input type="text" placeholder="Search...">
+        </div>
+
+        <button class="mobile-menu-btn"
+                onclick="toggleMobileMenu()">
+
+            ☰
+
+        </button>
+
+    </div>
+
+    <nav id="mobileNav">
+
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+        </ul>
+
+    </nav>
+
+</header>
 
     <!-- HERO SECTION -->
     <section class="hero">
