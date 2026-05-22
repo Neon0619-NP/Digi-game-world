@@ -1092,17 +1092,11 @@ window.deleteCancelledOrder = async function(orderId) {
 };
 
 // MOBILE MENU
-window.toggleMobileMenu = function() {
+const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+const mobileNav = document.getElementById("mobileNav");
 
-    const nav = document.querySelector("nav");
-
-    if (nav) {
-        nav.classList.toggle("active");
-    }
-};
-function toggleMobileMenu(){
-
-    const nav = document.getElementById("mobileNav");
-
-    nav.classList.toggle("active");
+if (mobileMenuBtn && mobileNav) {
+    mobileMenuBtn.addEventListener("click", function() {
+        mobileNav.classList.toggle("active");
+    });
 }

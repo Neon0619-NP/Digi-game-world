@@ -1768,7 +1768,6 @@ body.light-mode .order-actions select{
 
 #mobileNav{
     display: none;
-    margin-top: 12px;
 }
 
 #mobileNav.active{
