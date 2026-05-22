@@ -1809,3 +1809,20 @@ body.light-mode .order-actions select{
     background: rgba(0,247,255,0.15);
     color: #00f7ff;
 }
+
+.mobile-header{
+    display: none;
+}
+
+/* SHOW ONLY ON MOBILE */
+
+@media(max-width: 768px){
+
+    header{
+        display: none;
+    }
+
+    .mobile-header{
+        display: block;
+    }
+}
