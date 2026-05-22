@@ -17,6 +17,8 @@ import {
     deleteDoc,
     doc,
     updateDoc,
+    query,
+    where,
     serverTimestamp
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
@@ -196,7 +198,14 @@ if (checkoutForm) {
         const paymentMethod = checkoutForm.querySelector("select").value;
 
         const customerName = inputs[0].value.trim();
-        const customerEmail = inputs[1].value.trim();
+        const currentUser = auth.currentUser;
+
+         if (!currentUser) {
+         alert("Please login before placing an order.");
+         window.location.href = "login.html";
+         return;
+        }
+        const customerEmail = currentUser.email;
         const deliveryAddress = inputs[2].value.trim();
         const city = inputs[3].value.trim();
         const phoneNumber = inputs[4].value.trim();
@@ -208,6 +217,7 @@ if (checkoutForm) {
         });
 
         const order = {
+            userId: currentUser.uid,
             customerName: customerName,
             customerEmail: customerEmail,
             deliveryAddress: deliveryAddress,
@@ -561,6 +571,8 @@ onAuthStateChanged(auth, function(user) {
 
             profileStatus.innerText = "Status: Logged In";
 
+            displayCustomerOrders(user);
+
         } else {
 
             alert("Please login first.");
@@ -661,6 +673,17 @@ async function displayFirebaseOrders() {
             `;
         });
 
+        let deleteOrderButton = "";
+
+        if (order.status === "Cancelled by Customer") {
+           deleteOrderButton = `
+              <button class="delete-order-btn"
+                  onclick="deleteCancelledOrder('${orderDoc.id}')">
+                  Delete Cancelled Order
+              </button>
+            `;
+        }
+
         adminOrdersList.innerHTML += `
             <div class="admin-order-card">
                 <h3>Order ID: ${orderDoc.id}</h3>
@@ -669,12 +692,23 @@ async function displayFirebaseOrders() {
                 <p><strong>Phone:</strong> ${order.phoneNumber}</p>
                 <p><strong>Address:</strong> ${order.deliveryAddress}, ${order.city}</p>
                 <p><strong>Payment:</strong> ${order.paymentMethod}</p>
-                <p><strong>Status:</strong> ${order.status}</p>
+                <p><strong>Status:</strong><span class="order-status ${order.status === 'Pending' ? 'pending-status' : ''} ${order.status === 'Cancelled by Customer' ? 'cancelled-status' : ''}">${order.status}</span></p>
+
+                <div class="order-actions">
+                   <select onchange="updateOrderStatus('${orderDoc.id}', this.value)">
+                      <option value="Pending" ${order.status === "Pending" ? "selected" : ""}>Pending</option>
+                      <option value="Processing" ${order.status === "Processing" ? "selected" : ""}>Processing</option>
+                      <option value="Ready for Collection" ${order.status === "Ready for Collection" ? "selected" : ""}>Ready for Collection</option>
+                      <option value="Delivered" ${order.status === "Delivered" ? "selected" : ""}>Delivered</option>
+                      <option value="Cancelled by Customer" ${order.status === "Cancelled by Customer" ? "selected" : ""}>Cancelled by Customer</option>
+                   </select>
+                </div>
 
                 <h4>Items:</h4>
                 <ul>${itemsHTML}</ul>
 
                 <h3>Total: R${order.total}</h3>
+                ${deleteOrderButton}
             </div>
         `;
     });
@@ -682,26 +716,50 @@ async function displayFirebaseOrders() {
 
 displayFirebaseOrders();
 
+// ADMIN UPDATE ORDER STATUS
+window.updateOrderStatus = async function(orderId, newStatus) {
+
+    await updateDoc(doc(db, "orders", orderId), {
+        status: newStatus
+    });
+
+    alert("Order status updated.");
+
+    displayFirebaseOrders();
+};
+
 // ADMIN PAGE PROTECTION
 const adminPage = document.getElementById("adminProductForm");
 
 if (adminPage) {
+
     onAuthStateChanged(auth, function(user) {
-        const adminEmail = "neonkoane71@gmail.com";
+
+        const adminEmails = [
+            "neonkoane71@gmail.com",
+            "parmjeet122@gmail.com"
+        ];
 
         if (!user) {
+
             alert("Please login as admin first.");
+
             window.location.href = "login.html";
+
             return;
         }
 
-        if (user.email !== adminEmail) {
+        if (!adminEmails.includes(user.email)) {
+
             alert("Access denied. Admin only.");
+
             window.location.href = "index.html";
+
             return;
         }
     });
 }
+
 // WHATSAPP SERVICE MESSAGE
 window.sendWhatsApp = function(serviceName) {
 
@@ -712,4 +770,333 @@ window.sendWhatsApp = function(serviceName) {
         `https://wa.me/27687621416?text=${encodeURIComponent(message)}`;
 
     window.open(whatsappURL, "_blank");
+};
+
+window.filterByCategory = function(category) {
+    const cards = document.querySelectorAll(".product-card");
+
+    cards.forEach(card => {
+        const productCategory = card.dataset.category;
+
+        if (category === "all" || productCategory === category) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+};
+
+// SETTINGS DROPDOWN
+window.toggleSettingsMenu = function() {
+    const dropdown = document.getElementById("settingsDropdown");
+
+    if (dropdown) {
+        dropdown.classList.toggle("show");
+    }
+};
+
+document.addEventListener("click", function(e) {
+    const menu = document.querySelector(".settings-menu");
+
+    if (menu && !menu.contains(e.target)) {
+        const dropdown = document.getElementById("settingsDropdown");
+
+        if (dropdown) {
+            dropdown.classList.remove("show");
+        }
+    }
+});
+
+// THEME SYSTEM
+
+window.setTheme = function(mode) {
+
+    if (mode === "light") {
+
+        document.body.classList.add("light-mode");
+
+        localStorage.setItem("theme", "light");
+    }
+
+    else if (mode === "dark") {
+
+        document.body.classList.remove("light-mode");
+
+        localStorage.setItem("theme", "dark");
+    }
+
+    else {
+
+        localStorage.setItem("theme", "device");
+
+        applyDeviceTheme();
+    }
+};
+
+// APPLY DEVICE THEME
+function applyDeviceTheme() {
+
+    const prefersDark =
+        window.matchMedia("(prefers-color-scheme: dark)").matches;
+
+    if (prefersDark) {
+
+        document.body.classList.remove("light-mode");
+
+    } else {
+
+        document.body.classList.add("light-mode");
+    }
+}
+
+// LOAD SAVED THEME
+const savedTheme = localStorage.getItem("theme");
+
+if (savedTheme === "light") {
+
+    document.body.classList.add("light-mode");
+
+}
+
+else if (savedTheme === "dark") {
+
+    document.body.classList.remove("light-mode");
+
+}
+
+else {
+
+    applyDeviceTheme();
+}
+
+// NAVBAR PRODUCT SEARCH
+const navSearchInput = document.getElementById("navSearchInput");
+
+if (navSearchInput) {
+    navSearchInput.addEventListener("input", function() {
+        const searchValue = navSearchInput.value.toLowerCase().trim();
+        const productCards = document.querySelectorAll(".product-card");
+
+        productCards.forEach(card => {
+            const productName = card.dataset.name
+                ? card.dataset.name.toLowerCase()
+                : card.textContent.toLowerCase();
+
+            if (productName.includes(searchValue)) {
+                card.style.display = "block";
+            } else {
+                card.style.display = "none";
+            }
+        });
+    });
+}
+// TOGGLE SEARCH BAR
+window.toggleSearchBar = function() {
+
+    const searchInput =
+        document.getElementById("navSearchInput");
+
+    if (searchInput) {
+
+        searchInput.classList.toggle("show");
+
+        searchInput.focus();
+    }
+};
+
+// DYNAMIC CATEGORY HERO + FILTER
+window.changeCategory = function(category) {
+
+    const hero = document.getElementById("categoryHero");
+    const title = document.getElementById("categoryTitle");
+    const subtitle = document.getElementById("categorySubtitle");
+    const cards = document.querySelectorAll(".product-card");
+
+    if (!hero || !title || !subtitle) return;
+
+    hero.className = "category-hero " + category;
+
+    const categoryText = {
+        all: {
+            title: "Shop All Gaming Products",
+            subtitle: "Explore consoles, PCs, accessories, repairs and gaming gear."
+        },
+
+        playstation: {
+            title: "PlayStation Zone",
+            subtitle: "Shop PlayStation consoles, controllers, games and accessories."
+        },
+
+        xbox: {
+            title: "Xbox Gaming Hub",
+            subtitle: "Explore Xbox consoles, controllers, accessories and gaming gear."
+        },
+
+        pc: {
+            title: "PC & Laptop Gaming",
+            subtitle: "Find gaming laptops, PCs, monitors and performance accessories."
+        },
+
+        nintendo: {
+            title: "Nintendo World",
+            subtitle: "Discover Nintendo consoles, accessories and fun family gaming."
+        },
+
+        accessories: {
+            title: "Gaming Accessories",
+            subtitle: "Upgrade your setup with headsets, keyboards, controllers and more."
+        }
+    };
+
+    title.innerText = categoryText[category].title;
+    subtitle.innerText = categoryText[category].subtitle;
+
+    cards.forEach(card => {
+        const productCategory = card.dataset.category;
+
+        if (category === "all" || productCategory === category) {
+            card.style.display = "block";
+        } else {
+            card.style.display = "none";
+        }
+    });
+};
+
+// CUSTOMER ORDER HISTORY + CANCEL ORDER
+const customerOrdersList = document.getElementById("customerOrdersList");
+
+async function displayCustomerOrders(user) {
+
+    if (!customerOrdersList) return;
+
+    customerOrdersList.innerHTML = "<p>Loading your orders...</p>";
+
+    if (!user) {
+        customerOrdersList.innerHTML = "<p>Please login to view your orders.</p>";
+        return;
+    }
+
+    const ordersQuery = query(
+    collection(db, "orders"),
+    where("userId", "==", user.uid)
+);
+
+const querySnapshot = await getDocs(ordersQuery);
+
+    customerOrdersList.innerHTML = "";
+
+    let hasOrders = false;
+
+    querySnapshot.forEach(orderDoc => {
+
+        const order = orderDoc.data();
+
+        const orderEmail = order.customerEmail
+            ? order.customerEmail.toLowerCase().trim()
+            : "";
+
+        const userEmail = user.email
+            ? user.email.toLowerCase().trim()
+            : "";
+
+        const matchesByEmail = orderEmail === userEmail;
+        const matchesByUserId = order.userId && order.userId === user.uid;
+
+        if (matchesByEmail || matchesByUserId) {
+
+            hasOrders = true;
+
+            let itemsHTML = "";
+
+            if (order.items && Array.isArray(order.items)) {
+                order.items.forEach(item => {
+                    itemsHTML += `
+                        <li>
+                            ${item.name} - R${item.price} x ${item.quantity}
+                        </li>
+                    `;
+                });
+            }
+
+            let cancelButton = "";
+
+            if (order.status === "Pending") {
+                cancelButton = `
+                    <button class="cancel-order-btn"
+                            onclick="cancelCustomerOrder('${orderDoc.id}')">
+                        Cancel Order
+                    </button>
+                `;
+            }
+
+            customerOrdersList.innerHTML += `
+                <div class="customer-order-card">
+
+                    <h3>Order ID: ${orderDoc.id}</h3>
+
+                    <p>
+                        <strong>Status:</strong>
+                        <span class="${order.status === 'Cancelled by Customer' ? 'cancelled-status' : ''}">
+                            ${order.status || "Pending"}
+                        </span>
+                    </p>
+
+                    <p><strong>Total:</strong> R${order.total || 0}</p>
+
+                    <p><strong>Payment:</strong> ${order.paymentMethod || "Not selected"}</p>
+
+                    <h4>Items:</h4>
+
+                    <ul>
+                        ${itemsHTML}
+                    </ul>
+
+                    ${cancelButton}
+
+                </div>
+            `;
+        }
+    });
+
+    if (!hasOrders) {
+        customerOrdersList.innerHTML = "<p>You have no orders yet.</p>";
+    }
+}
+
+window.cancelCustomerOrder = async function(orderId) {
+
+    const confirmCancel = confirm("Are you sure you want to cancel this order?");
+
+    if (!confirmCancel) return;
+
+    await updateDoc(doc(db, "orders", orderId), {
+        status: "Cancelled by Customer"
+    });
+
+    alert("Order cancelled successfully.");
+
+    displayCustomerOrders(auth.currentUser);
+};
+
+window.deleteCancelledOrder = async function(orderId) {
+
+    const confirmDelete = confirm("Delete this cancelled order permanently?");
+
+    if (!confirmDelete) return;
+
+    await deleteDoc(doc(db, "orders", orderId));
+
+    alert("Cancelled order deleted.");
+
+    displayFirebaseOrders();
+};
+
+// MOBILE MENU
+window.toggleMobileMenu = function() {
+
+    const nav = document.querySelector("nav");
+
+    if (nav) {
+        nav.classList.toggle("active");
+    }
 };

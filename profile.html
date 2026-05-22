@@ -19,9 +19,30 @@
     <nav>
         <ul>
             <li><a href="profile.html">Profile</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="signup.html">Sign Up</a></li>
-            <li><a href="#" id="logoutBtn" style="display:none;">Logout</a></li>
+            <li class="settings-menu">
+          <button class="settings-btn" onclick="toggleSettingsMenu()">
+            ⚙
+          </button>
+          <div class="settings-dropdown" id="settingsDropdown">
+             <a href="login.html">Login</a>
+             <a href="signup.html">Sign Up</a>
+             <a href="admin.html" id="adminNav" style="display:none;">Admin</a>
+             <a href="#" id="logoutBtn" style="display:none;">Logout</a>
+             <div class="theme-options">
+                 <button onclick="setTheme('dark')">
+                     🌙 Dark
+                 </button>
+
+                 <button onclick="setTheme('light')">
+                      ☀ Light
+                 </button>
+                
+                 <button onclick="setTheme('device')">
+                     📱 Device
+                 </button>
+              </div>
+          </div>
+         </li>
         </ul>
     </nav>
 </header>
@@ -38,7 +59,18 @@
             <button class="shop-btn">Continue Shopping</button>
         </a>
     </div>
+
+    <section class="my-orders-section">
+
+     <h2>My Orders</h2>
+
+     <div id="customerOrdersList"></div>
+
+    </section>
+
 </section>
+
+
 
 <footer>
     <p>© 2026 Digi Game World</p>

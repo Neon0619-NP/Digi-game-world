@@ -26,36 +26,82 @@
             <li><a href="products.html">Products</a></li>
             <li><a href="services.html">Services</a></li>
             <li><a href="contact.html">Contact</a></li>
-            <li><a href="cart.html">Cart 🛒<span id="cart-count">0</span></a></li>
-            <li><a href="profile.html">Profile</a></li>
-            <li id="adminNav" style="display:none;">
-                <a href="admin.html">Admin</a>
+            <li class="search-container">
+                <button class="search-btn"
+                  onclick="toggleSearchBar()">
+                 🔍
+                </button>
+             <input type="text"
+             id="navSearchInput"
+             class="search-input"
+             placeholder="Search...">
             </li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="signup.html">Sign Up</a></li>
+            <li><a href="cart.html">Cart 🛒<span id="cart-count">0</span></a></li>
+            <li class="settings-menu">
+          <button class="settings-btn" onclick="toggleSettingsMenu()">
+            ⚙
+          </button>
+          <div class="settings-dropdown" id="settingsDropdown">
+             <a href="profile.html">Profile</a>
+             <a href="login.html">Login</a>
+             <a href="signup.html">Sign Up</a>
+             <a href="admin.html" id="adminNav" style="display:none;">Admin</a>
+             <a href="#" id="logoutBtn" style="display:none;">Logout</a>
+                <div class="theme-options">
+                 <button onclick="setTheme('dark')">
+                     🌙 Dark
+                 </button>
+
+                 <button onclick="setTheme('light')">
+                      ☀ Light
+                 </button>
+                
+                 <button onclick="setTheme('device')">
+                     📱 Device
+                 </button>
+              </div>
+          </div>
+         </li>
         </ul>
     </nav>
 
 </header>
 
-<section class="products">
 
-    <h2>All Products</h2>
+<section class="category-hero" id="categoryHero">
 
-    <div class="product-controls">
-        <input type="text" id="searchInput" placeholder="Search products...">
+    <div class="category-hero-overlay">
 
-        <select id="categoryFilter">
-            <option value="all">All Categories</option>
-            <option value="console">Consoles</option>
-            <option value="accessory">Accessories</option>
-            <option value="setup">Setups</option>
-        </select>
+        <h1 id="categoryTitle">Shop All Gaming Products</h1>
+
+        <p id="categorySubtitle">
+            Explore consoles, PCs, accessories, repairs and gaming gear.
+        </p>
+
+        <div class="category-tabs">
+
+            <button onclick="changeCategory('all')">All</button>
+
+            <button onclick="changeCategory('playstation')">PlayStation</button>
+
+            <button onclick="changeCategory('xbox')">Xbox</button>
+
+            <button onclick="changeCategory('pc')">PC & Laptops</button>
+
+            <button onclick="changeCategory('nintendo')">Nintendo</button>
+
+            <button onclick="changeCategory('accessories')">Accessories</button>
+
+        </div>
+
     </div>
+
+</section>
+
+<section class="products">
 
     <div class="product-grid" id="firebaseProducts"></div>
 
-</section>
 </section>
 
 <footer>

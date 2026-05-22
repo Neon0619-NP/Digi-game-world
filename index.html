@@ -12,35 +12,64 @@
 </head>
 <body>
 
-<header>
+ <header>
+ <!-- LEFT SIDE --> 
+ <div class="left-nav"> 
+    <a href="index.html" class="logo-link"> 
+        <img src="logo.png" alt="Logo" class="logo-img"> 
+    </a> 
+    <div class="site-text">
+      <h2 class="site-name">Digi Game World</h2>
+      <p class="site-tagline">
+      Level Up Your Gaming Experience
+      </p>
+   </div>
+ </div> 
 
-    <!-- LEFT SIDE -->
-    <div class="left-nav">
-        <a href="index.html" class="logo-link">
-            <img src="logo.png" alt="Logo" class="logo-img">
-        </a>
+ <button class="menu-toggle"
+        onclick="toggleMobileMenu()">
 
-        <h2 class="site-name">Digi Game World</h2>
-    </div>
+    ☰
 
-    <!-- RIGHT SIDE -->
-    <nav>
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="products.html">Products</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="profile.html">Profile</a></li>     
-            <li id="adminNav" style="display:none;">
-              <a href="admin.html">Admin</a>
-            </li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="signup.html">Sign Up</a></li>
-            <li><a href="cart.html">🛒<span id="cart-count">0</span></a></li>
-        </ul>
+</button>
+
+ <!-- RIGHT SIDE -->
+   <nav>
+       <ul>
+         <li><a href="index.html">Home</a></li>
+         <li><a href="products.html">Products</a></li>
+         <li><a href="services.html">Services</a></li>
+         <li><a href="contact.html">Contact</a></li>
+         <li><a href="cart.html">🛒<span id="cart-count">0</span></a></li>
+         <li class="settings-menu">
+          <button class="settings-btn" onclick="toggleSettingsMenu()">
+            ⚙
+          </button>
+          <div class="settings-dropdown" id="settingsDropdown">
+             <a href="profile.html">Profile</a>
+             <a href="login.html">Login</a>
+             <a href="signup.html">Sign Up</a>
+             <a href="admin.html" id="adminNav" style="display:none;">Admin</a>
+             <a href="#" id="logoutBtn" style="display:none;">Logout</a>
+             <div class="theme-options">
+                 <button onclick="setTheme('dark')">
+                     🌙 Dark
+                 </button>
+
+                 <button onclick="setTheme('light')">
+                      ☀ Light
+                 </button>
+                
+                 <button onclick="setTheme('device')">
+                     📱 Device
+                 </button>
+              </div>
+          </div>
+         </li>
+      </ul>
     </nav>
 
-</header>
+ </header>
 
     <!-- HERO SECTION -->
     <section class="hero">

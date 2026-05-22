@@ -22,11 +22,30 @@
             <li><a href="products.html">Products</a></li>
             <li><a href="services.html">Services</a></li>
             <li><a href="contact.html">Contact</a></li>
-            <li><a href="profile.html">Profile</a></li>
-            <li><a href="login.html">Login</a></li>
-            <li><a href="signup.html">Sign Up</a></li>
-            <li><a href="cart.html">Cart 🛒 <span id="cart-count">0</span></a></li>
-            <li><a href="#" id="logoutBtn" style="display:none;">Logout</a></li>
+            <li class="settings-menu">
+          <button class="settings-btn" onclick="toggleSettingsMenu()">
+            ⚙
+          </button>
+          <div class="settings-dropdown" id="settingsDropdown">
+            <a href="profile.html">Profile</a>
+            <a href="login.html">Login</a>
+            <a href="signup.html">Sign Up</a>
+            <a href="#" id="logoutBtn" style="display:none;">Logout</a>
+                <div class="theme-options">
+                 <button onclick="setTheme('dark')">
+                     🌙 Dark
+                 </button>
+
+                 <button onclick="setTheme('light')">
+                      ☀ Light
+                 </button>
+                
+                 <button onclick="setTheme('device')">
+                     📱 Device
+                 </button>
+              </div>
+          </div>
+         </li>
         </ul>
     </nav>
 </header>
@@ -40,10 +59,13 @@
         <input type="text" id="adminProductImage" placeholder="Image URL" required>
 
         <select id="adminProductCategory" required>
-            <option value="">Select Category</option>
-            <option value="console">Console</option>
-            <option value="accessory">Accessory</option>
-            <option value="setup">Setup</option>
+          <option value="">Select Category</option>
+          <option value="pc">PC / Laptops</option>
+          <option value="playstation">PlayStation</option>
+          <option value="xbox">Xbox</option>
+          <option value="nintendo">Nintendo</option>
+          <option value="repair">Repair</option>
+          <option value="accessories">Accessories & Other</option>
         </select>
 
         <textarea id="adminProductDescription" placeholder="Product Description" required></textarea>
