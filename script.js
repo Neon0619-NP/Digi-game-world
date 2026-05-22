@@ -1100,3 +1100,9 @@ window.toggleMobileMenu = function() {
         nav.classList.toggle("active");
     }
 };
+function toggleMobileMenu(){
+
+    const nav = document.getElementById("mobileNav");
+
+    nav.classList.toggle("active");
+}
