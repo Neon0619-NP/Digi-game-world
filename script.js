@@ -531,6 +531,32 @@ onAuthStateChanged(auth, function(user) {
       }
     }
 
+    const adminNavMobile = document.getElementById("adminNavMobile");
+    const logoutBtnMobile = document.getElementById("logoutBtnMobile");
+
+    if (adminNavMobile) {
+      const adminEmails = [
+         "neonkoane71@gmail.com",
+         "parmjeet122@gmail.com"
+        ];
+
+       adminNavMobile.style.display =
+          user && adminEmails.includes(user.email) ? "block" : "none";
+    }
+
+    if (logoutBtnMobile) {
+        if (user) {
+            logoutBtnMobile.style.display = "inline";
+           logoutBtnMobile.onclick = async function(e) {
+            e.preventDefault();
+            await signOut(auth);
+            alert("You have logged out.");
+            window.location.href = "index.html";
+           };
+        } else {
+          logoutBtnMobile.style.display = "none";
+         }
+    }
 
     // LOGOUT BUTTON
     if (logoutBtn) {
@@ -1100,3 +1126,44 @@ if (mobileMenuBtn && mobileNav) {
         mobileNav.classList.toggle("active");
     });
 }
+
+function toggleSettingsMenu(){
+
+    const settingsMenu =
+        document.getElementById(
+            "mobileSettingsDropdown"
+        );
+
+    settingsMenu.classList.toggle("active");
+}
+
+window.showMobileSettings = function() {
+    document.getElementById("mobileMainMenu").style.display = "none";
+    document.getElementById("mobileSettingsMenu").style.display = "flex";
+};
+
+window.showMobileMainMenu = function() {
+    document.getElementById("mobileSettingsMenu").style.display = "none";
+    document.getElementById("mobileMainMenu").style.display = "flex";
+};
+
+// MOBILE SETTINGS MENU SWITCH
+window.showMobileSettings = function() {
+    const mainMenu = document.getElementById("mobileMainMenu");
+    const settingsMenu = document.getElementById("mobileSettingsMenu");
+
+    if (mainMenu && settingsMenu) {
+        mainMenu.style.display = "none";
+        settingsMenu.style.display = "flex";
+    }
+};
+
+window.showMobileMainMenu = function() {
+    const mainMenu = document.getElementById("mobileMainMenu");
+    const settingsMenu = document.getElementById("mobileSettingsMenu");
+
+    if (mainMenu && settingsMenu) {
+        settingsMenu.style.display = "none";
+        mainMenu.style.display = "flex";
+    }
+};

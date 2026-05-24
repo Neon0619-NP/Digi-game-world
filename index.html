@@ -10,7 +10,7 @@
     <!-- Google Font -->
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
+<body class="home-page">
 
  <header>
  <!-- LEFT SIDE --> 
@@ -47,16 +47,16 @@
              <a href="admin.html" id="adminNav" style="display:none;">Admin</a>
              <a href="#" id="logoutBtn" style="display:none;">Logout</a>
              <div class="theme-options">
-                 <button onclick="setTheme('dark')">
-                     🌙 Dark
+                 <button onclick="setTheme('dark Mode')">
+                     Dark Mode
                  </button>
 
-                 <button onclick="setTheme('light')">
-                      ☀ Light
+                 <button onclick="setTheme('light Mode')">
+                      Light Mode
                  </button>
                 
-                 <button onclick="setTheme('device')">
-                     📱 Device
+                 <button onclick="setTheme('device Default')">
+                     Device Default
                  </button>
               </div>
           </div>
@@ -66,7 +66,7 @@
 
  </header>
 
-<header class="mobile-header">
+ <header class="mobile-header">
 
     <div class="mobile-topbar">
 
@@ -86,16 +86,49 @@
 
     <nav id="mobileNav" class="mobile-nav">
 
-        <ul>
-            <li><a href="index.html">Home</a></li>
-            <li><a href="products.html">Products</a></li>
-            <li><a href="services.html">Services</a></li>
-            <li><a href="contact.html">Contact</a></li>
-        </ul>
+     <ul id="mobileMainMenu">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="products.html">Products</a></li>
+        <li><a href="services.html">Services</a></li>
+        <li><a href="contact.html">Contact</a></li>
+
+        <li>
+            <button class="settings-toggle" onclick="showMobileSettings()">
+                Settings
+            </button>
+        </li>
+     </ul>
+
+     <ul id="mobileSettingsMenu" style="display:none;">
+          <li>
+             <button class="settings-toggle" onclick="showMobileMainMenu()">
+                 ← Back
+             </button>
+          </li>
+
+         <li><a href="profile.html">Profile</a></li>
+         <li id="adminNavMobile" style="display:none;">
+             <a href="admin.html">Admin</a>
+         </li>
+
+         <li><a href="login.html">Login</a></li>
+         <li><a href="signup.html">Sign Up</a></li>
+         <li><a href="cart.html">Cart</a></li>
+
+         <li><button onclick="setTheme('dark')">Dark Mode</button></li>
+         <li><button onclick="setTheme('light')">Light Mode</button></li>
+         <li><button onclick="setTheme('device')">Device Default</button></li>
+
+         <li>
+            <a href="#" id="logoutBtnMobile" style="display:none;">
+                Logout
+            </a>
+         </li>
+       </ul>
 
     </nav>
 
-</header>
+ </header>
 
     <!-- HERO SECTION -->
     <section class="hero">

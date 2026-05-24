@@ -38,16 +38,16 @@
              <a href="admin.html" id="adminNav" style="display:none;">Admin</a>
              <a href="#" id="logoutBtn" style="display:none;">Logout</a>
                 <div class="theme-options">
-                 <button onclick="setTheme('dark')">
-                     🌙 Dark
+                 <button onclick="setTheme('dark Mode')">
+                    Dark Mode
                  </button>
 
-                 <button onclick="setTheme('light')">
-                      ☀ Light
+                 <button onclick="setTheme('light Mode')">
+                    Light Mode
                  </button>
                 
-                 <button onclick="setTheme('device')">
-                     📱 Device
+                 <button onclick="setTheme('device Default')">
+                    Device Default
                  </button>
               </div>
           </div>
@@ -56,6 +56,57 @@
     </nav>
 
 </header>
+
+ <header class="mobile-header">
+
+    <div class="mobile-topbar">
+
+        <a href="index.html" class="mobile-logo-wrap">
+            <img src="logo.png" class="mobile-logo">
+        </a>
+
+        <div class="mobile-search">
+            <input type="text" placeholder="Search...">
+        </div>
+
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+         ☰
+       </button>
+
+    </div>
+
+    <nav id="mobileNav" class="mobile-nav">
+
+        <ul>
+            <li><a href="index.html">Home</a></li>
+            <li><a href="products.html">Products</a></li>
+            <li><a href="services.html">Services</a></li>
+            <li><a href="contact.html">Contact</a></li>
+            <li class="mobile-settings">
+                <button class="settings-toggle"
+                  onclick="toggleSettingsMenu()">
+                  ⚙ Settings
+               </button>
+
+              <div id="mobileSettingsDropdown"
+                  class="mobile-settings-dropdown">
+                  
+                  <a href="profile.html">👤 Profile</a>
+                  <a href="admin.html">⚡ Admin</a>
+                  <a href="login.html">🔑 Login</a>
+                  <a href="signup.html">✨ Sign Up</a>
+                  <a href="cart.html">🛒 Cart <span id="cart-count-mobile">0</span></a>
+                  <button onclick="setTheme('dark')">🌙 Dark Mode</button>
+                  <button onclick="setTheme('light')">☀ Light Mode</button>
+                  <button onclick="setTheme('device')">📱 Device Default</button>
+                  <a href="#" id="logoutBtnMobile" style="display:none;">🚪 Logout</a>
+              </div>
+            </li>
+        </ul>
+
+    </nav>
+
+ </header>
 
 <section class="services page-animation">
 
