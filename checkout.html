@@ -13,9 +13,15 @@
 </div>
 
 <header>
-    <a href="index.html" class="logo-link">
-    <img src="logo.png" alt="Digi Game World Logo" class="logo-img">
-    </a>
+    <div class="left-nav">
+        <a href="index.html" class="logo-link">
+            <img src="logo.png" alt="Digi Game World Logo" class="logo-img">
+        </a>
+        <div class="brand-info">
+            <h2 class="site-name">Digi Game World</h2>
+            <p class="site-tagline">Level Up Your Gaming Experience</p>
+        </div>
+    </div>
 
     <nav>
         <ul>
@@ -33,19 +39,6 @@
             <a href="login.html">Login</a>
             <a href="signup.html">Sign Up</a>
             <a href="#" id="logoutBtn" style="display:none;">Logout</a>
-               <div class="theme-options">
-                 <button onclick="setTheme('dark Mode')">
-                     Dark Mode
-                 </button>
-
-                 <button onclick="setTheme('light Mode')">
-                      Light Mode
-                 </button>
-                
-                 <button onclick="setTheme('device Default')">
-                     Device Default
-                 </button>
-              </div>
           </div>
          </li>
         </ul>
@@ -92,9 +85,6 @@
              <a href="login.html">🔑 Login</a>
              <a href="signup.html">✨ Sign Up</a>
              <a href="cart.html">🛒 Cart <span id="cart-count-mobile">0</span></a>
-             <button onclick="setTheme('dark')">🌙 Dark Mode</button>
-             <button onclick="setTheme('light')">☀ Light Mode</button>
-             <button onclick="setTheme('device')">📱 Device Default</button>
              <a href="#" id="logoutBtnMobile" style="display:none;">🚪 Logout</a>
              </div>
             </li>
@@ -114,18 +104,25 @@
         <input type="text" placeholder="City" required>
         <input type="text" placeholder="Phone Number" required>
         
-        <select required>
-            <option value="">Select Payment Method</option>
-            <option value="Card Payment">Card Payment</option>
-            <option value="Cash on Collection - 20% Deposit Required">
-                Cash on Collection - 20% Deposit Required
-            </option>
-        </select>
-        <p class="payment-note">
-            Cash on delivery is not available. Cash on collection requires a 20% deposit before the order is confirmed.
-        </p>
+        <label class="payment-label">Payment Method</label>
+         <select id="paymentMethod" required>
+         <option value="">Select Payment Method</option>
+         <option value="Card Payment">Card Payment</option>
+         <option value="EFT / Bank Transfer">EFT / Bank Transfer</option>
+         <option value="Cash on Collection - 20% Deposit Required">
+             Cash on Collection - 20% Deposit Required
+         </option>
+         </select>
+
+          <p class="payment-note">
+           Cash on delivery is not available. Cash on collection requires a 20% deposit before the order is confirmed.
+          </p>
 
         <h3 id="checkoutTotal">Total: R0</h3>
+
+        <button type="button" id="payNowBtn">
+            Pay Now 
+        </button>
 
         <button class="shop-btn" type="submit">Place Order</button>
     </form>

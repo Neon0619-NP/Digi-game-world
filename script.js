@@ -632,7 +632,8 @@ async function loadFirebaseProducts() {
 
             <div class="card product-card"
                  data-name="${product.name}"
-                 data-category="${product.category}">
+                 data-category="${product.category}"
+                 data-price="${product.price}">
 
                 <img src="${product.image}" alt="${product.name}">
 
@@ -833,68 +834,6 @@ document.addEventListener("click", function(e) {
     }
 });
 
-// THEME SYSTEM
-
-window.setTheme = function(mode) {
-
-    if (mode === "light") {
-
-        document.body.classList.add("light-mode");
-
-        localStorage.setItem("theme", "light");
-    }
-
-    else if (mode === "dark") {
-
-        document.body.classList.remove("light-mode");
-
-        localStorage.setItem("theme", "dark");
-    }
-
-    else {
-
-        localStorage.setItem("theme", "device");
-
-        applyDeviceTheme();
-    }
-};
-
-// APPLY DEVICE THEME
-function applyDeviceTheme() {
-
-    const prefersDark =
-        window.matchMedia("(prefers-color-scheme: dark)").matches;
-
-    if (prefersDark) {
-
-        document.body.classList.remove("light-mode");
-
-    } else {
-
-        document.body.classList.add("light-mode");
-    }
-}
-
-// LOAD SAVED THEME
-const savedTheme = localStorage.getItem("theme");
-
-if (savedTheme === "light") {
-
-    document.body.classList.add("light-mode");
-
-}
-
-else if (savedTheme === "dark") {
-
-    document.body.classList.remove("light-mode");
-
-}
-
-else {
-
-    applyDeviceTheme();
-}
-
 // NAVBAR PRODUCT SEARCH
 const navSearchInput = document.getElementById("navSearchInput");
 
@@ -941,6 +880,21 @@ window.changeCategory = function(category) {
     if (!hero || !title || !subtitle) return;
 
     hero.className = "category-hero " + category;
+
+    // REMOVE OLD THEMES
+    document.body.classList.remove(
+        "all-theme",
+        "playstation-theme",
+        "xbox-theme",
+        "pc-theme",
+        "nintendo-theme",
+        "accessories-theme"
+    );
+
+    // ADD NEW THEME
+    document.body.classList.add(
+        `${category}-theme`
+    );
 
     const categoryText = {
         all: {
@@ -1167,3 +1121,135 @@ window.showMobileMainMenu = function() {
         mainMenu.style.display = "flex";
     }
 };
+
+// SORT FIREBASE PRODUCT CARDS
+const sortProducts = document.getElementById("sortProducts");
+
+if (sortProducts) {
+    sortProducts.addEventListener("change", function () {
+        const productGrid = document.getElementById("firebaseProducts");
+        const cards = Array.from(document.querySelectorAll(".product-card"));
+
+        cards.sort((a, b) => {
+            const nameA = a.dataset.name.toLowerCase();
+            const nameB = b.dataset.name.toLowerCase();
+
+            const priceA = Number(a.dataset.price);
+            const priceB = Number(b.dataset.price);
+
+            if (this.value === "low-high") {
+                return priceA - priceB;
+            }
+
+            if (this.value === "high-low") {
+                return priceB - priceA;
+            }
+
+            if (this.value === "a-z") {
+                return nameA.localeCompare(nameB);
+            }
+
+            return 0;
+        });
+
+        productGrid.innerHTML = "";
+
+        cards.forEach(card => {
+            productGrid.appendChild(card);
+        });
+    });
+}
+
+// CLEAR CART
+window.clearCart = function() {
+
+    localStorage.removeItem("cart");
+
+    cart = [];
+
+    updateCartCount();
+
+    displayCart();
+
+    alert("Cart cleared.");
+};
+
+// LIGHT / DARK MODE
+const themeBtn = document.getElementById("themeBtn");
+
+function applyTheme() {
+    const savedTheme = localStorage.getItem("theme");
+
+    if (savedTheme === "light") {
+        document.body.classList.add("light-mode");
+
+        if (themeBtn) {
+            themeBtn.innerText = "☀ Light Mode";
+        }
+    } else {
+        document.body.classList.remove("light-mode");
+
+        if (themeBtn) {
+            themeBtn.innerText = "🌙 Dark Mode";
+        }
+    }
+}
+
+if (themeBtn) {
+    themeBtn.addEventListener("click", function() {
+        if (document.body.classList.contains("light-mode")) {
+            localStorage.setItem("theme", "dark");
+        } else {
+            localStorage.setItem("theme", "light");
+        }
+
+        applyTheme();
+    });
+}
+
+applyTheme();
+
+// YOCO PAYMENT PLACEHOLDER
+const payNowBtn = document.getElementById("payNowBtn");
+
+if (payNowBtn) {
+    payNowBtn.addEventListener("click", function() {
+
+        alert(
+            "Online payments are not active yet. Yoco details still need to be added."
+        );
+
+        /*
+        Later, when Yoco is ready:
+        1. Add Yoco public key
+        2. Send order total
+        3. Open Yoco checkout
+        4. Save order as Paid in Firebase
+        */
+    });
+}
+
+
+// LOADING SCREEN
+
+window.addEventListener("load", () => {
+
+    setTimeout(() => {
+
+        const loader =
+            document.getElementById("loader");
+
+        if(loader){
+
+            loader.style.opacity = "0";
+
+            setTimeout(() => {
+
+                loader.remove();
+
+            },600);
+        }
+
+    },2000);
+
+});

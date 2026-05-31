@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Digi Game World</title>
-    <link rel="icon" type="image/png" href="logo.png">
+    <link rel="icon" type="image/png" href="logo.png?v=1.0">
     <link rel="stylesheet" href="style.css">
 
     <!-- Google Font -->
@@ -12,18 +12,32 @@
 </head>
 <body class="home-page">
 
+ <div id="loader">
+
+    <img src="logo.png" class="loader-logo">
+
+    <h1>Digi Game World</h1>
+
+    <p>Level Up Your Gaming Experience</p>
+
+    <div class="loader-bar">
+        <div class="loader-fill"></div>
+    </div>
+
+ </div>
+
  <header>
  <!-- LEFT SIDE --> 
  <div class="left-nav"> 
     <a href="index.html" class="logo-link"> 
         <img src="logo.png" alt="Logo" class="logo-img"> 
     </a> 
-    <div class="site-text">
-      <h2 class="site-name">Digi Game World</h2>
-      <p class="site-tagline">
-      Level Up Your Gaming Experience
-      </p>
-   </div>
+    <div class="brand-info">
+        <h2 class="site-name">Digi Game World</h2>
+        <p class="site-tagline">
+          Repairs, Upgrades, and Gaming Solutions
+        </p>
+    </div>
  </div> 
 
 
@@ -46,19 +60,9 @@
              <a href="signup.html">Sign Up</a>
              <a href="admin.html" id="adminNav" style="display:none;">Admin</a>
              <a href="#" id="logoutBtn" style="display:none;">Logout</a>
-             <div class="theme-options">
-                 <button onclick="setTheme('dark Mode')">
-                     Dark Mode
-                 </button>
-
-                 <button onclick="setTheme('light Mode')">
-                      Light Mode
-                 </button>
-                
-                 <button onclick="setTheme('device Default')">
-                     Device Default
-                 </button>
-              </div>
+              <button id="themeBtn">
+                 Dark Mode
+              </button>
           </div>
          </li>
       </ul>
@@ -114,12 +118,6 @@
          <li><a href="login.html">Login</a></li>
          <li><a href="signup.html">Sign Up</a></li>
          <li><a href="cart.html">Cart</a></li>
-
-         <li><button onclick="setTheme('dark')">Dark Mode</button></li>
-         <li><button onclick="setTheme('light')">Light Mode</button></li>
-         <li><button onclick="setTheme('device')">Device Default</button></li>
-
-         <li>
             <a href="#" id="logoutBtnMobile" style="display:none;">
                 Logout
             </a>
@@ -131,20 +129,29 @@
  </header>
 
     <!-- HERO SECTION -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>LEVEL UP YOUR GAMING</h1>
+
+    <section class="video-hero">
+        <video autoplay muted loop playsinline class="hero-video">
+          <source src="gaming-hero.mp4" type="video/mp4">
+        </video>
+
+        <div class="video-overlay"></div>
+
+        <div class="video-hero-content">
+          <h1>Digi Game World</h1>
+
             <p>
-              Your local gaming and tech store for gaming accessories, console support,
-              PC items, laptop help, sales and repairs.
+              Level up your gaming experience with consoles,
+              accessories, setups and repair services.
             </p>
 
-            <a href="products.html">
-             <button class="shop-btn">Explore Store</button>
-            </a>
+          <div class="hero-buttons">
+             <a href="products.html" class="hero-btn">Shop Now</a>
+             <a href="services.html" class="hero-btn secondary-btn">Repair Services</a>
+          </div>
 
         </div>
-    </section>
+   </section>
 
     <!-- ABOUT -->
     <section class="about">
